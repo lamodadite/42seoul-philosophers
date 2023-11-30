@@ -1,9 +1,15 @@
 #include <philosophers.h>
 
+int	print_error(char *msg)
+{
+	printf("%s\n", msg);
+	return (1);
+}
+
 int	ft_atoi(const char *str)
 {
-	int	result;
-	int	sign;
+	long long	result;
+	int			sign;
 
 	sign = 1;
 	result = 0;
@@ -19,5 +25,7 @@ int	ft_atoi(const char *str)
 		result += *str - '0';
 		str++;
 	}
+	if (result > INT32_MAX || result < 0)
+		return (-1);
 	return (result * sign);
 }

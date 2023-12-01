@@ -35,7 +35,7 @@ void	init_forks(t_info *info)
 	i = -1;
 	while (++i < info->total_num)
 	{
-		pthread_mutex_init(&info->forks[i].m_fork, NULL);
+		pthread_mutex_init(&(info->forks[i].m_fork), NULL);
 		info->forks[i].fork_state = 0;
 	}
 }
@@ -51,8 +51,8 @@ int	init_philo(t_info *info)
 		info->philos[i].info = info;
 		info->philos[i].state = 0;
 		info->philos[i].eat_num = 0;
-		info->philos[i].l_fork = info->forks[i];
-		info->philos[i].r_fork = info->forks[(i + 1) % info->total_num];
+		info->philos[i].l_fork = &info->forks[i];
+		info->philos[i].r_fork = &info->forks[(i + 1) % info->total_num];
 	}
 	return (0);
 }

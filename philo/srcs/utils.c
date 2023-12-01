@@ -2,10 +2,10 @@
 
 int	check_death(t_philo *philo)
 {
-	//printf("cur time = %lld\n", timestamp());
-	//printf("philo->time_to_die = %lld\n", philo->time_to_die);
 	if (timestamp() >= philo->time_to_die)
 	{
+		printf("cur time = %lld\n", timestamp());
+		printf("philo[%d]->time_to_die = %lld\n", philo->id, philo->time_to_die);
 		pthread_mutex_lock(&philo->info->m_state);
 		philo->info->state = 1;
 		pthread_mutex_lock(&philo->info->print);

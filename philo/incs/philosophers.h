@@ -50,8 +50,8 @@ typedef struct s_philo
 	int			state;
 	int			eat_num;
 	long long	time_to_die;
-	t_fork		l_fork;
-	t_fork		r_fork;
+	t_fork		*l_fork;
+	t_fork		*r_fork;
 }	t_philo;
 
 /* utils */

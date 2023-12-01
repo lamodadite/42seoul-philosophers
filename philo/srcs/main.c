@@ -2,23 +2,25 @@
 
 int	eat_delicious_spagetti(t_philo *philo)
 {
-	pthread_mutex_lock(&(philo->l_fork.m_fork));
+	pthread_mutex_lock(&(philo->l_fork->m_fork));
 	if (philo_says(philo, TAKE_FORK_MSG) == 1)
 		return (1);
-	philo->l_fork.fork_state = 1;
-	pthread_mutex_lock(&(philo->r_fork.m_fork));
+	philo->l_fork->fork_state = 1;
+	pthread_mutex_lock(&(philo->r_fork->m_fork));
 	if (philo_says(philo, TAKE_FORK_MSG) == 1)
 		return (1);
-	philo->r_fork.fork_state = 1;
+	philo->r_fork->fork_state = 1;
+	printf("philo[%d]'s time_to_die -> %lld\n", philo->id, philo->time_to_die);
 	philo->time_to_die = timestamp() + philo->info->die_time;
+	printf("philo[%d]'s time_to_die -> %lld\n", philo->id, philo->time_to_die);
 	if (philo_says(philo, EAT_MSG) == 1)
 		return (1);
 	ft_usleep(philo->info->eat_time);
 	philo->eat_num++;
-	philo->l_fork.fork_state = 0;
-	pthread_mutex_unlock(&(philo->r_fork.m_fork));
-	philo->r_fork.fork_state = 0;
-	pthread_mutex_unlock(&(philo->l_fork.m_fork));
+	pthread_mutex_unlock(&(philo->l_fork->m_fork));
+	philo->l_fork->fork_state = 0;
+	pthread_mutex_unlock(&(philo->r_fork->m_fork));
+	philo->r_fork->fork_state = 0;
 	return (0);
 }
 

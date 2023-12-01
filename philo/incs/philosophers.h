@@ -8,11 +8,12 @@
 # include <stdlib.h> // free, malloc
 # include <sys/time.h> // gettimeofday 
 
-# define TAKE_FORK_MSG "%ld %d has taken a fork\n"
-# define EAT_MSG "%ld %d is eating\n"
-# define SLEEP_MSG "%ld %d is sleeping\n"
-# define THINK_MSG "%ld %d is thinking\n"
-# define DIE_MASG "%ld %d is died\n"
+// philo says
+# define TAKE_FORK_MSG "%lld %d has taken a fork\n"
+# define EAT_MSG "%lld %d is eating\n"
+# define SLEEP_MSG "%lld %d is sleeping\n"
+# define THINK_MSG "%lld %d is thinking\n"
+# define DIE_MSG "%lld %d is died\n"
 
 // error
 # define MALLOC_ERROR_MSG "malloc failed\n"
@@ -29,8 +30,10 @@ typedef struct s_info
 	int				eat_time;
 	int				sleep_time;
 	int				max_eat;
-	pthread_mutex_t	print;
-	pthread_mutex_t	state;
+	int				state;
+	long long		start_time;
+	pthread_mutex_t	print; // m
+	pthread_mutex_t	m_state;
 }	t_info;
 
 typedef struct s_fork
@@ -45,7 +48,8 @@ typedef struct s_philo
 	t_info		*info;
 	int			id;
 	int			state;
-	int			lastes_eat_time;
+	int			eat_num;
+	long long	time_to_die;
 	t_fork		l_fork;
 	t_fork		r_fork;
 }	t_philo;
@@ -53,12 +57,16 @@ typedef struct s_philo
 /* utils */
 int	ft_atoi(const char *str);
 int	print_error(char *msg);
+long long	timestamp(void);
+int	ft_usleep(int time);
+int	philo_says(t_philo *philo, char *msg);
+int	check_death(t_philo *philo);
 
 /* init */
-int	init(t_info *info, t_philo *philo, int ac, char **av);
+int	init(t_info *info, int ac, char **av);
 int	init_philo(t_info *info);
 void	init_forks(t_info *info);
-int	init_info(t_info *info, t_philo *philo, int ac, char **av);
+int	init_info(t_info *info, int ac, char **av);
 
 /* run */
 

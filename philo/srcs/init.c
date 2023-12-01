@@ -1,8 +1,7 @@
 #include "philosophers.h"
 
-int	init_info(t_info *info, t_philo *philo, int ac, char **av)
+int	init_info(t_info *info, int ac, char **av)
 {
-	info->philos = philo;
 	info->total_num = ft_atoi(av[1]);
 	info->die_time = ft_atoi(av[2]);
 	info->eat_time = ft_atoi(av[3]);
@@ -25,7 +24,7 @@ int	init_info(t_info *info, t_philo *philo, int ac, char **av)
 		return (print_error(MALLOC_ERROR_MSG));
 	}
 	pthread_mutex_init(&info->print, NULL);
-	pthread_mutex_init(&info->state, NULL);
+	pthread_mutex_init(&info->m_state, NULL);
 	return (0);
 }
 
@@ -50,19 +49,19 @@ int	init_philo(t_info *info)
 	{
 		info->philos[i].id = i;
 		info->philos[i].info = info;
-		info->philos[i].lastes_eat_time = 0;
 		info->philos[i].state = 0;
+		info->philos[i].eat_num = 0;
 		info->philos[i].l_fork = info->forks[i];
 		info->philos[i].r_fork = info->forks[(i + 1) % info->total_num];
 	}
 	return (0);
 }
 
-int	init(t_info *info, t_philo *philo, int ac, char **av)
+int	init(t_info *info, int ac, char **av)
 {
 	if (ac < 5 || ac > 6)
 		return (print_error(INVALID_ARG_ERROR_MSG));
-	if (init_info(info, philo, ac, av) == 1)
+	if (init_info(info, ac, av) == 1)
 		return (1);
 	init_forks(info);
 	if (init_philo(info) == 1)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philosophers.h                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jongmlee <jongmlee@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/04 21:15:48 by jongmlee          #+#    #+#             */
+/*   Updated: 2023/12/04 21:23:05 by jongmlee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
 
@@ -19,8 +31,6 @@
 # define MALLOC_ERROR_MSG "malloc failed\n"
 # define INVALID_ARG_ERROR_MSG "invalid argument\n"
 
-#define PHILO_DEATH 1
-
 typedef struct s_info
 {
 	struct s_philo	*philos;
@@ -32,7 +42,8 @@ typedef struct s_info
 	int				max_eat;
 	int				state;
 	long long		start_time;
-	pthread_mutex_t	m_print; // m
+	pthread_mutex_t	m_check;
+	pthread_mutex_t	m_print;
 	pthread_mutex_t	m_state;
 }	t_info;
 
@@ -54,21 +65,29 @@ typedef struct s_philo
 }	t_philo;
 
 /* utils */
-int	ft_atoi(const char *str);
-int	print_error(char *msg);
 long long	timestamp(void);
-int	ft_usleep(int time);
-int	philo_says(t_philo *philo, char *msg);
-int	check_death(t_philo *philo);
+int			ft_atoi(const char *str);
+int			print_error(char *msg);
+int			ft_usleep(int time);
+int			philo_says(t_philo *philo, char *msg, int flag);
+int			check_death(t_philo *philo);
 
 /* init */
-int	init(t_info *info, int ac, char **av);
-int	init_philo(t_info *info);
-void	init_forks(t_info *info);
-int	init_info(t_info *info, int ac, char **av);
+int			init(t_info *info, int ac, char **av);
+int			init_philo(t_info *info);
+int			init_info(t_info *info, int ac, char **av);
+int			malloc_args(t_info *info);
+void		init_forks(t_info *info);
 
-/* run */
+/* thread */
+int			one_case(t_philo *philo);
+int			take_forks(t_philo *philo);
+int			eat_delicious_spagetti(t_philo *philo);
+void		drop_forks(t_philo *philo);
+void		*routine(void *arg);
 
-
+/* monitor */
+void		monitoring(t_info *info);
+int			check_death(t_philo *philo);
 
 #endif

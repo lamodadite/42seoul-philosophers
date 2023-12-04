@@ -1,33 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jongmlee <jongmlee@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/04 21:04:10 by jongmlee          #+#    #+#             */
+/*   Updated: 2023/12/04 21:16:29 by jongmlee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <philosophers.h>
 
-int	check_death(t_philo *philo)
-{
-	if (timestamp() >= philo->time_to_die)
-	{
-		//printf("cur time = %lld\n", timestamp());
-		//printf("philo[%d]->time_to_die = %lld\n", philo->id, philo->time_to_die);
-		printf("[%d]timestamp() - philo->time_to_die = %lld\n", philo->id, timestamp() - philo->time_to_die);
-		pthread_mutex_lock(&philo->info->m_state);
-		printf("monitoring thread -> die because time\n");
-		philo->info->state = 1;
-		pthread_mutex_lock(&philo->info->m_print);
-		printf(DIE_MSG, timestamp() - philo->info->start_time, philo->id);
-		pthread_mutex_unlock(&philo->info->m_print);
-		pthread_mutex_unlock(&philo->info->m_state);
-		return (1);
-	}
-	if (philo->info->max_eat > 0 && philo->eat_num >= philo->info->max_eat)
-	{
-		printf("monitoring thread -> die because max_eat\n");
-		pthread_mutex_lock(&philo->info->m_state);
-		philo->info->state = 1;
-		pthread_mutex_unlock(&philo->info->m_state);
-		return (1);
-	}
-	return (0);
-}
-
-int	philo_says(t_philo *philo, char *msg)
+int	philo_says(t_philo *philo, char *msg, int flag)
 {
 	pthread_mutex_lock(&philo->info->m_print);
 	pthread_mutex_lock(&philo->info->m_state);
@@ -35,7 +20,10 @@ int	philo_says(t_philo *philo, char *msg)
 	{
 		pthread_mutex_unlock(&philo->info->m_state);
 		pthread_mutex_unlock(&philo->info->m_print);
-		//printf("[%d] in philo_says\n", philo->id);
+		if (flag == 1 || flag == 2)
+			pthread_mutex_unlock(&philo->l_fork->m_fork);
+		if (flag == 2)
+			pthread_mutex_unlock(&philo->r_fork->m_fork);
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->info->m_state);
@@ -46,22 +34,20 @@ int	philo_says(t_philo *philo, char *msg)
 
 int	ft_usleep(int time)
 {
-	long long	l_time;
-	long long	start;
+	long long	target;
 
-	l_time = (long long) time;
-	start = timestamp();
-	while (timestamp() - start < l_time)
-		usleep((useconds_t) l_time * 100);
+	target = (long long) time + timestamp();
+	while (target >= timestamp())
+		usleep(100);
 	return (0);
 }
 
 long long	timestamp(void)
 {
-	struct timeval te;
+	struct timeval	te;
 
 	gettimeofday(&te, NULL);
-	return (te.tv_sec * 1000) + (te.tv_usec / 1000);
+	return ((te.tv_sec * 1000) + (te.tv_usec / 1000));
 }
 
 int	print_error(char *msg)

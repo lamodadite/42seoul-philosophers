@@ -1,20 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jongmlee <jongmlee@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/04 21:04:17 by jongmlee          #+#    #+#             */
+/*   Updated: 2023/12/04 21:11:32 by jongmlee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philosophers.h"
 
-int	init_info(t_info *info, int ac, char **av)
+int	malloc_args(t_info *info)
 {
-	info->total_num = ft_atoi(av[1]);
-	info->die_time = ft_atoi(av[2]);
-	info->eat_time = ft_atoi(av[3]);
-	info->sleep_time = ft_atoi(av[4]);
-	info->state = 0;
-	info->max_eat = 0;
-	if (info->total_num < 0 || info->die_time < 0 
-		|| info->eat_time < 0 || info->sleep_time < 0)
-		return (print_error(INVALID_ARG_ERROR_MSG));
-	if (ac == 6)
-		info->max_eat = ft_atoi(av[5]);
-	if (info->max_eat < 0)
-		return (print_error(INVALID_ARG_ERROR_MSG));
 	info->philos = (t_philo *)malloc(info->total_num * sizeof(t_philo));
 	if (info->philos == NULL)
 		return (print_error(MALLOC_ERROR_MSG));
@@ -24,6 +23,27 @@ int	init_info(t_info *info, int ac, char **av)
 		free(info->philos);
 		return (print_error(MALLOC_ERROR_MSG));
 	}
+	return (0);
+}
+
+int	init_info(t_info *info, int ac, char **av)
+{
+	info->total_num = ft_atoi(av[1]);
+	info->die_time = ft_atoi(av[2]);
+	info->eat_time = ft_atoi(av[3]);
+	info->sleep_time = ft_atoi(av[4]);
+	info->state = 0;
+	info->max_eat = 0;
+	if (info->total_num < 0 || info->die_time < 0
+		|| info->eat_time < 0 || info->sleep_time < 0)
+		return (print_error(INVALID_ARG_ERROR_MSG));
+	if (ac == 6)
+		info->max_eat = ft_atoi(av[5]);
+	if (info->max_eat < 0)
+		return (print_error(INVALID_ARG_ERROR_MSG));
+	if (malloc_args(info) == 1)
+		return (1);
+	pthread_mutex_init(&info->m_check, NULL);
 	pthread_mutex_init(&info->m_print, NULL);
 	pthread_mutex_init(&info->m_state, NULL);
 	return (0);

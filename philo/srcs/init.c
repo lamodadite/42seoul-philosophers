@@ -6,6 +6,7 @@ int	init_info(t_info *info, int ac, char **av)
 	info->die_time = ft_atoi(av[2]);
 	info->eat_time = ft_atoi(av[3]);
 	info->sleep_time = ft_atoi(av[4]);
+	info->state = 0;
 	info->max_eat = 0;
 	if (info->total_num < 0 || info->die_time < 0 
 		|| info->eat_time < 0 || info->sleep_time < 0)
@@ -23,7 +24,7 @@ int	init_info(t_info *info, int ac, char **av)
 		free(info->philos);
 		return (print_error(MALLOC_ERROR_MSG));
 	}
-	pthread_mutex_init(&info->print, NULL);
+	pthread_mutex_init(&info->m_print, NULL);
 	pthread_mutex_init(&info->m_state, NULL);
 	return (0);
 }
@@ -49,7 +50,6 @@ int	init_philo(t_info *info)
 	{
 		info->philos[i].id = i;
 		info->philos[i].info = info;
-		info->philos[i].state = 0;
 		info->philos[i].eat_num = 0;
 		info->philos[i].l_fork = &info->forks[i];
 		info->philos[i].r_fork = &info->forks[(i + 1) % info->total_num];

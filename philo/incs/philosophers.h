@@ -32,7 +32,7 @@ typedef struct s_info
 	int				max_eat;
 	int				state;
 	long long		start_time;
-	pthread_mutex_t	print; // m
+	pthread_mutex_t	m_print; // m
 	pthread_mutex_t	m_state;
 }	t_info;
 
@@ -47,7 +47,6 @@ typedef struct s_philo
 	pthread_t	tid;
 	t_info		*info;
 	int			id;
-	int			state;
 	int			eat_num;
 	long long	time_to_die;
 	t_fork		*l_fork;

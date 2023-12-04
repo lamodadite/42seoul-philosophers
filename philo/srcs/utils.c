@@ -4,18 +4,21 @@ int	check_death(t_philo *philo)
 {
 	if (timestamp() >= philo->time_to_die)
 	{
-		printf("cur time = %lld\n", timestamp());
-		printf("philo[%d]->time_to_die = %lld\n", philo->id, philo->time_to_die);
+		//printf("cur time = %lld\n", timestamp());
+		//printf("philo[%d]->time_to_die = %lld\n", philo->id, philo->time_to_die);
+		printf("[%d]timestamp() - philo->time_to_die = %lld\n", philo->id, timestamp() - philo->time_to_die);
 		pthread_mutex_lock(&philo->info->m_state);
+		printf("monitoring thread -> die because time\n");
 		philo->info->state = 1;
-		pthread_mutex_lock(&philo->info->print);
+		pthread_mutex_lock(&philo->info->m_print);
 		printf(DIE_MSG, timestamp() - philo->info->start_time, philo->id);
-		pthread_mutex_unlock(&philo->info->print);
+		pthread_mutex_unlock(&philo->info->m_print);
 		pthread_mutex_unlock(&philo->info->m_state);
 		return (1);
 	}
-	if (philo->eat_num >= philo->info->max_eat)
+	if (philo->info->max_eat > 0 && philo->eat_num >= philo->info->max_eat)
 	{
+		printf("monitoring thread -> die because max_eat\n");
 		pthread_mutex_lock(&philo->info->m_state);
 		philo->info->state = 1;
 		pthread_mutex_unlock(&philo->info->m_state);
@@ -26,25 +29,30 @@ int	check_death(t_philo *philo)
 
 int	philo_says(t_philo *philo, char *msg)
 {
-	pthread_mutex_lock(&philo->info->print);
+	pthread_mutex_lock(&philo->info->m_print);
 	pthread_mutex_lock(&philo->info->m_state);
 	if (philo->info->state == 1)
 	{
 		pthread_mutex_unlock(&philo->info->m_state);
+		pthread_mutex_unlock(&philo->info->m_print);
+		//printf("[%d] in philo_says\n", philo->id);
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->info->m_state);
 	printf(msg, timestamp() - philo->info->start_time, philo->id);
-	pthread_mutex_unlock(&philo->info->print);
+	pthread_mutex_unlock(&philo->info->m_print);
 	return (0);
 }
 
 int	ft_usleep(int time)
 {
-	long long l_time;
+	long long	l_time;
+	long long	start;
 
 	l_time = (long long) time;
-	usleep((useconds_t) l_time * 1000);
+	start = timestamp();
+	while (timestamp() - start < l_time)
+		usleep((useconds_t) l_time * 100);
 	return (0);
 }
 

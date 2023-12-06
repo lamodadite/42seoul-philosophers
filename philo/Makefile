@@ -6,31 +6,36 @@
 #    By: jongmlee <jongmlee@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/14 18:53:46 by jongmlee          #+#    #+#              #
-#    Updated: 2023/12/04 21:20:03 by jongmlee         ###   ########.fr        #
+#    Updated: 2023/12/06 12:52:48 by jongmlee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME:=philo
-
-SRC_DIR:=srcs
-SRCS:=main.c utils.c init.c thread.c monitor.c
-INC_DIR:=incs
-INCS:=philosophers.h
-
-CC:=cc
-CFLAGS:=-Wall -Wextra -Werror #-g3 -fsanitize=thread
-
-$(NAME) : $(addprefix $(SRC_DIR)/, $(SRCS)) $(addprefix $(INC_DIR)/, $(INCS))
-	$(CC) $(CFLAGS) -o $@ $(addprefix $(SRC_DIR)/, $(SRCS)) -I $(INC_DIR)
-
-.PHONY : all clean fclean re bonus
+NAME := philo
+SRC_DIR := srcs
+SRCS := main.c utils.c init.c thread.c monitor.c
+OBJ_DIR := objs
+OBJS := $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
+INC_DIR := incs
+INCS := philosophers.h
+CC := cc
+CFLAGS := -Wall -Wextra -Werror
+LDFLAGS := -I $(INC_DIR)
 
 all : $(NAME)
 
+$(OBJ_DIR)/%.o : $(SRC_DIR)/%.c $(addprefix $(INC_DIR)/, $(INCS))
+	@mkdir -p $(OBJ_DIR)
+	@$(CC) $(CFLAGS) $(LDFLAGS) -c -o $@ $<
+
+$(NAME) : $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^
+
 clean :
-# 채워야 하는데..	
+	rm -rf $(OBJ_DIR)
 
 fclean : clean
 	rm -f $(NAME)
 
 re : fclean all
+
+.PHONY : all clean fclean re

@@ -6,7 +6,7 @@
 /*   By: jongmlee <jongmlee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 21:15:48 by jongmlee          #+#    #+#             */
-/*   Updated: 2023/12/05 21:50:10 by jongmlee         ###   ########.fr       */
+/*   Updated: 2023/12/06 10:55:58 by jongmlee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,13 @@ int			init_info(t_info *info, int ac, char **av);
 void		open_sems(t_info *info);
 
 /* process */
-void	eat_delicious_spagetti(t_info *info);
-void	*monitoring(void *args);
-void	routine(t_info *info);
+void		eat_delicious_spagetti(t_info *info);
+void		*monitoring(void *args);
+void		routine(t_info *info);
+
+/* main */
+void		clear(t_info *info);
+void		wait_philo(t_info *info);
+void		make_philo(t_info *info);
 
 #endif

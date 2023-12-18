@@ -6,7 +6,7 @@
 /*   By: jongmlee <jongmlee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 21:04:17 by jongmlee          #+#    #+#             */
-/*   Updated: 2023/12/04 22:10:22 by jongmlee         ###   ########.fr       */
+/*   Updated: 2023/12/07 17:02:34 by jongmlee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	init_philo(t_info *info)
 	i = -1;
 	while (++i < info->total_num)
 	{
-		info->philos[i].id = i;
+		info->philos[i].id = i + 1;
 		info->philos[i].info = info;
 		info->philos[i].eat_num = 0;
 		info->philos[i].l_fork = &info->forks[i];

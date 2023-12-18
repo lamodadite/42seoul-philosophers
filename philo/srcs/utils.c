@@ -6,7 +6,7 @@
 /*   By: jongmlee <jongmlee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 21:04:10 by jongmlee          #+#    #+#             */
-/*   Updated: 2023/12/05 13:26:00 by jongmlee         ###   ########.fr       */
+/*   Updated: 2023/12/12 23:10:37 by jongmlee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,18 @@
 
 int	philo_says(t_philo *philo, char *msg, int flag)
 {
-	pthread_mutex_lock(&philo->info->m_print);
 	pthread_mutex_lock(&philo->info->m_state);
 	if (philo->info->state == 1)
 	{
-		pthread_mutex_unlock(&philo->info->m_state);
-		pthread_mutex_unlock(&philo->info->m_print);
 		if (flag == 1 || flag == 2)
 			pthread_mutex_unlock(&philo->l_fork->m_fork);
 		if (flag == 2)
 			pthread_mutex_unlock(&philo->r_fork->m_fork);
+		pthread_mutex_unlock(&philo->info->m_state);
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->info->m_state);
+	pthread_mutex_lock(&philo->info->m_print);
 	printf(msg, timestamp() - philo->info->start_time, philo->id);
 	pthread_mutex_unlock(&philo->info->m_print);
 	return (0);
@@ -37,7 +36,7 @@ int	ft_usleep(int time)
 	long long	target;
 
 	target = (long long) time + timestamp();
-	while (target >= timestamp())
+	while (target > timestamp())
 		usleep(100);
 	return (0);
 }

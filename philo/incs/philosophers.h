@@ -6,7 +6,7 @@
 /*   By: jongmlee <jongmlee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 21:15:48 by jongmlee          #+#    #+#             */
-/*   Updated: 2023/12/04 21:23:05 by jongmlee         ###   ########.fr       */
+/*   Updated: 2023/12/19 07:34:22 by jongmlee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <string.h> // memset
 # include <unistd.h> // write, usleep
 # include <stdlib.h> // free, malloc
-# include <sys/time.h> // gettimeofday 
+# include <sys/time.h> // gettimeofday
 
 // philo says
 # define TAKE_FORK_MSG "%lld %d has taken a fork\n"

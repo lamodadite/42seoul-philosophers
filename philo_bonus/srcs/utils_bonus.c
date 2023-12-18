@@ -6,7 +6,7 @@
 /*   By: jongmlee <jongmlee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 21:04:10 by jongmlee          #+#    #+#             */
-/*   Updated: 2023/12/05 21:18:10 by jongmlee         ###   ########.fr       */
+/*   Updated: 2023/12/19 08:02:05 by jongmlee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_usleep(int time)
 	long long	target;
 
 	target = (long long) time + timestamp();
-	while (target >= timestamp())
+	while (target > timestamp())
 		usleep(100);
 	return (0);
 }

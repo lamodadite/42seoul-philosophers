@@ -6,7 +6,7 @@
 /*   By: jongmlee <jongmlee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 21:48:41 by jongmlee          #+#    #+#             */
-/*   Updated: 2023/12/05 23:23:34 by jongmlee         ###   ########.fr       */
+/*   Updated: 2023/12/19 08:09:58 by jongmlee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	*monitoring(void *args)
 			exit(1);
 		}
 		sem_post(info->sem_check);
+		usleep(10);
 	}
 }
 
@@ -55,6 +56,8 @@ void	routine(t_info *info)
 {
 	pthread_t	tid;
 
+	while (timestamp() <= info->start_time)
+		usleep(10);
 	if (info->id % 2 == 1)
 		ft_usleep(info->eat_time / 2);
 	sem_wait(info->sem_check);

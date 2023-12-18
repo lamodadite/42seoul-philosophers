@@ -6,7 +6,7 @@
 /*   By: jongmlee <jongmlee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 21:04:07 by jongmlee          #+#    #+#             */
-/*   Updated: 2023/12/06 13:07:49 by jongmlee         ###   ########.fr       */
+/*   Updated: 2023/12/19 08:07:44 by jongmlee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ void	make_philo(t_info *info)
 	int	i;
 
 	i = -1;
-	info->start_time = timestamp();
+	info->start_time = timestamp() + (info->eat_time);
 	while (++i < info->total_num)
 	{
 		info->pids[i] = fork();
 		if (info->pids[i] == 0)
 		{
-			info->id = i;
+			info->id = i + 1;
 			routine(info);
 		}
 	}
